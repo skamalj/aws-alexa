@@ -1,0 +1,241 @@
+{
+    "interactionModel": {
+        "prompts": [
+            {
+              "id": "Validate.Slot.TravelDate",
+              "variations": [
+                {
+                  "type": "PlainText",
+                  "value": "VSCode says: Travel date cannot be in the past"
+                }
+              ]  
+            },  
+            {
+              "id": "Elicit.Slot.TravelDate",
+              "variations": [
+                {
+                  "type": "PlainText",
+                  "value": "When is this trip?"
+                },
+                {
+                  "type": "PlainText",
+                  "value": "When will you travel?"
+                },
+                {
+                  "type": "PlainText",
+                  "value": "On what date will you travel?"
+                }
+              ]
+            },
+            {
+              "id": "Confirm.Slot.TravelDate",
+              "variations": [
+                {
+                  "type": "PlainText",
+                  "value": "So your trip is on {travelDate}"
+                },
+                {
+                  "type": "PlainText",
+                  "value": "You said {travelDate}, right?"
+                }
+              ]
+            }
+        ],    
+        "dialog": {
+            "delegationStrategy": "SKILL_RESPONSE",      
+            "intents": [
+                {
+                    "name": "PlanMyTrip",
+                    "delegationStrategy": "ALWAYS",          
+                    "confirmationRequired": false,
+                    "slots": [
+                        {
+                            "name": "travelDate",
+                            "type": "AMAZON.DATE",
+                            "confirmationRequired": true,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation" : "Elicit.Slot.TravelDate",
+                                "confirmation": "Confirm.Slot.TravelDate"
+                            },
+                            "validations": [
+                              {
+                                "type": "isInDuration",
+                                "prompt": "Validate.Slot.TravelDate",
+                                "start": "P0D"
+                              }
+                            ]
+                        }
+                    ]
+                }
+            ]      
+        },
+        "languageModel": {
+            "invocationName": "hello world",
+            "types": [
+                {
+                  "name": "AMAZON.US_CITY",
+                  "values": [
+                    {
+                      "name": {
+                        "value": "Chandigarh"
+                      }
+                    },
+                    {
+                      "name": {
+                        "value": "Bela"
+                      }
+                    }
+                  ]
+                },
+                {
+                 "name": "LIST_OF_ACTIVITIES",
+                 "values": [
+                      {
+                        "id": "BIKING",
+                        "name": {
+                          "value": "biking",
+                          "synonyms": [
+                            "bike",
+                            "bike ride"
+                          ]
+                        }
+                      }
+                    ]    
+                },
+                {
+                  "name": "LIST_OF_TRAVEL_MODES",
+                  "values": [
+                    {
+                      "id": "TRAIN",
+                      "name": {
+                        "value": "taking the train",
+                        "synonyms": [
+                          "train",
+                          "train ride"
+                        ]
+                      }
+                    },
+                    {
+                      "id": "FLY",
+                      "name": {
+                        "value": "flying",
+                        "synonyms": [
+                          "jet",
+                          "fly",
+                          "on an airplane"
+                        ]
+                      }
+                    },
+                    {
+                      "id": "DRIVE",
+                      "name": {
+                        "value": "driving",
+                        "synonyms": [
+                          "auto",
+                          "automobile",
+                          "taking a road trip",
+                          "road trip"
+                        ]
+                      }
+                    }
+                  ]
+                }
+            ],    
+            "intents": [
+                {
+                  "name": "WhereIAmTravelling",
+                  "samples": [
+                    "To which city am I travelling",
+                    "What is my destination city",
+                    "Where my trip will end",
+                    "Where I am going"
+                  ]
+                },
+                {
+                  "name": "AMAZON.SearchAction<object@WeatherForecast[temperature]>",
+                  "samples": []
+                },
+                {
+                    "name": "PlanMyTrip",
+                    "samples": [
+                        "{toCity}",
+                        "I want to travel from {fromCity} to {toCity} {travelDate}",
+                        "i want to visit {toCity}",
+                        "i am going on trip on {travelDate}",
+                        "I'm {travelMode} from {fromCity} to {toCity}",
+                        "i'm {travelMode} to {toCity} to {activity}",
+                        "plan a trip",
+                        "plan a trip to {toCity} ",
+                        "plan a trip starting from {fromCity} ",
+                        "I'd like to leave on {travelDate} ",
+                        "I'd like to leave on the {travelDate} ",
+                        "I'd like to fly out of {fromCity} "
+                    ],
+                    "slots": [ 
+                        {
+                            "name": "travelDate",
+                            "type": "AMAZON.DATE",
+                            "samples": [
+                                "I'd travel on the {travelDate} "
+                            ]
+                        },
+                        {
+                            "name": "toCity",
+                            "type": "AMAZON.US_CITY"
+                          },
+                          {
+                            "name": "fromCity",
+                            "type": "AMAZON.US_CITY"
+                          },
+                          {
+                            "name": "travelMode",
+                            "type": "LIST_OF_TRAVEL_MODES"
+                          },
+                          {
+                            "name": "activity",
+                            "type": "LIST_OF_ACTIVITIES",
+                            "multipleValues": {
+                              "enabled": true
+                            }
+                          }
+                    ]
+                },
+                {
+                    "name": "AMAZON.CancelIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.HelpIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.StopIntent",
+                    "samples": [
+                      "exit",
+                      "I am all done",
+                      "bye"
+                    ]
+                },
+                {
+                    "name": "HelloWorldIntent",
+                    "slots": [],
+                    "samples": [
+                        "hello",
+                        "how are you",
+                        "say hi world",
+                        "say hi",
+                        "hi",
+                        "say hello world",
+                        "say hello"
+                    ]
+                },
+                {
+                    "name": "AMAZON.NavigateHomeIntent",
+                    "samples": []
+                }
+            ]
+        }
+    }
+  }
+  
